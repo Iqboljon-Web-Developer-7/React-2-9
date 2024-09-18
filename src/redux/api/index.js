@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery, retry } from "@reduxjs/toolkit/query/react";
 const baseQuery = async (args, api, extraOptions) => {
   const { dispatch } = api;
   const rawBaseQuery = fetchBaseQuery({
-    baseUrl: "https://proxy-tau-one.vercel.app/api", // o'zgaradi
+    baseUrl: "http://13.51.206.62:8000/api", // o'zgaradi
     prepareHeaders: (headers) => {
       const token = JSON.parse(localStorage.getItem("react-2-6-user-token")); // o'zgaradi
       if (token) {
