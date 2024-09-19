@@ -10,7 +10,6 @@ const ResendOTP = () => {
   const navigate = useNavigate();
 
   const onFinish = (values) => {
-    // console.log("Success:", values);
     let email = btoa(values.email);
     resendOTP({ body: values });
     navigate(`/otp?email=${email}`);
@@ -35,7 +34,7 @@ const ResendOTP = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input Email!",
+                    message: "",
                   },
                 ]}
               >

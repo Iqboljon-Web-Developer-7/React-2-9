@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { FaOpencart } from "react-icons/fa";
+import { BsSuitHeartFill } from "react-icons/bs";
 
 import logo from "@/assets/logo.svg";
 
 const Header = () => {
   const [isFixed, setIsFixed] = useState(false);
+  const cart = useSelector((state) => state.cart.value);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -33,20 +36,28 @@ const Header = () => {
             <img src={logo} />
           </Link>
         </h2>
-        <div className="links flex items-center justify-center gap-3">
-          <Link to={"/sign-up"} className="animate-fade-in-top-2">
-            <Button type={"link"}>Sign Up</Button>
+        <div className="links flex items-center justify-center gap-4 text-2xl">
+          <Link
+            to={"/cart"}
+            className="text-green-300 animate-fade-in-top-2 relative"
+          >
+            <FaOpencart />{" "}
+            {cart.length > 0 && (
+              <span className="absolute inset-[-.3rem_-.3rem_auto_auto] h-4 w-4 text-[.8rem] rounded-full flex items-center justify-center text-slate-900 bg-green-500">
+                {cart?.length}
+              </span>
+            )}
           </Link>
-          <Link to={"/sign-in"} className="animate-fade-in-top-3">
-            <Button type={"link"}>Sign In</Button>
+          <Link to={"/wishlist"} className="text-red-300 animate-fade-in-top-3">
+            <BsSuitHeartFill />
           </Link>
           <Link
             to={"/profile"}
-            className={`text-2xl ${
+            className={`${
               !isLogged && "hidden"
-            } animate-fade-in-top-5`}
+            } animate-fade-in-top-5 text-blue-500`}
           >
-            <FaUserCircle className="text-slate-200" />
+            <FaUserCircle />
           </Link>
         </div>
       </div>

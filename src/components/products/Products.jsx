@@ -1,62 +1,38 @@
-import { useStateValue } from "@/context";
-import React, { memo } from "react";
+import React from "react";
+import Categories from "../categories/Categories";
+import { useGetCarsQuery } from "@/redux/api/sclices/productSlice";
+import CardItem from "../card/Card";
 
-import { TbHeartPlus } from "react-icons/tb";
-import { BsCartPlus } from "react-icons/bs";
+const Products = () => {
+  const { data } = useGetCarsQuery();
+  console.log(data?.payload);
 
-const Products = ({ data, title }) => {
-  let [state, dispatch] = useStateValue();
+  let cars = (
+    <div className="cars mt-10 flex flex-col items-center justify-center sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {data?.payload.map((item) => (
+        <CardItem key={item._id} car={item} />
+      ))}
+    </div>
+  );
 
-  let items = data?.map((product, inx) => (
-    <div
-      className="border dark:border-gray-600 dark:hover:border-slate-300 hover:border-black hover:shadow-md duration-300 cursor-pointer p-3"
-      key={inx}
-    >
-      <div className="w-full h-60 bg-gray-200">
-        <img
-          className="w-full h-full object-contain"
-          src={product?.images[0]}
-          alt="Photo"
-        />
-      </div>
-      <p className="mt-2 leading-6 text-[1rem] dark:text-slate-200">
-        {product.title}
-      </p>
-      <p className="mt-2 leading-5 text-sm line-clamp-2 text-slate-800 dark:text-slate-300">
-        {product.description}
-      </p>
-      <div className="flex justify-between items-center mt-2">
-        <strong>
-          <span className="text-green-800 dark:text-green-500">
-            {product.price} $
-          </span>
-        </strong>
-        <div className="flex gap-3">
-          <button
-            onClick={() => dispatch({ type: "ADD_WISH_ITEM", product })}
-            className="p-2 rounded-full hover:bg-sky-400 text-[1rem] bg-sky-300 duration-200"
-          >
-            <TbHeartPlus />
-          </button>
-
-          <button
-            onClick={() => dispatch({ type: "ADD_CART_ITEM", product })}
-            className="p-2 rounded-full hover:bg-green-400 text-[1rem] bg-green-300 duration-200"
-          >
-            <BsCartPlus />
-          </button>
+  return (
+    <section className="product-container p-3">
+      <div className="wrapper mt-10">
+        <div className="info text-center flex items-center justify-center flex-col gap-5">
+          <h2 className="text-4xl text-[#f7ede2]">Discover Your Next Drive</h2>
+          <p className="max-w-4xl text-sm text-slate-300">
+            Explore our exclusive range of premium cars that blend luxury,
+            performance, and advanced technology. From sleek sedans to powerful
+            SUVs, our collection is designed to meet the needs of every driver.
+            Whether you’re seeking the elegance of a luxury vehicle or the
+            thrill of a sport coupe, find your perfect ride with us today.
+          </p>
         </div>
       </div>
-    </div>
-  ));
-  return (
-    <div className="container mx-auto">
-      <h3 className="text-2xl font-bold mb-3">{title}</h3>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-        {items}
-      </div>
-    </div>
+      <Categories />
+      {cars}
+    </section>
   );
 };
 
-export default memo(Products);
+export default Products;
