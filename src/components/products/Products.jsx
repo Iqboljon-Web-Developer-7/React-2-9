@@ -1,19 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Categories from "../categories/Categories";
 import { useGetCarsQuery } from "@/redux/api/sclices/productSlice";
 import CardItem from "../card/Card";
+import { useSelector } from "react-redux";
+import notFoundCar from "@/assets/carNotFound.webp";
 
 const Products = () => {
-  const { data } = useGetCarsQuery();
-  console.log(data?.payload);
+  let { data } = useGetCarsQuery();
+  const category = useSelector((state) => state.category.value);
+  const [cars, setCars] = useState();
 
-  let cars = (
-    <div className="cars mt-10 flex flex-col items-center justify-center sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {data?.payload.map((item) => (
-        <CardItem key={item._id} car={item} />
-      ))}
-    </div>
-  );
+  useEffect(() => {
+    if (category) {
+      let filteredData = data?.payload.filter(
+        (item) => item.category == category
+      );
+      setCars(
+        <div className="cars mt-10 flex flex-col items-center justify-center sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {filteredData.length > 1 ? (
+            filteredData.map((item) => <CardItem key={item._id} car={item} />)
+          ) : (
+            <img
+              src={notFoundCar}
+              className="max-h-80 max-w-80 mx-auto col-span-4 rounded-full"
+            />
+          )}
+        </div>
+      );
+    } else {
+      setCars(
+        <div className="cars mt-10 flex flex-col items-center justify-center sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {data?.payload.map((item) => (
+            <CardItem key={item._id} car={item} />
+          ))}
+        </div>
+      );
+    }
+  }, [category]);
+
+  useEffect(() => {
+    setCars(
+      <div className="cars mt-10 flex flex-col items-center justify-center sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {data?.payload.map((item) => (
+          <CardItem key={item._id} car={item} />
+        ))}
+      </div>
+    );
+  }, [data]);
 
   return (
     <section className="product-container p-3">

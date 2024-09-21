@@ -11,15 +11,24 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "@/redux/slices/cart-slice";
+import UniModal from "../modal/Modal";
+import { Form, Input, InputNumber, Button } from "antd";
+import { useUpdateCarMutation } from "@/redux/api/sclices/productSlice";
 
 export default function CardItem({ car }) {
+  const [updateCar] = useUpdateCarMutation();
   const cart = useSelector((state) => state.cart.value);
   const [valid, setValid] = useState(true);
 
+  const [form] = Form.useForm();
+
+  const onFinish = (values) => {
+    updateCar({ id: car._id, body: values });
+    console.log("Submitted Values:", values);
+  };
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  console.log(cart);
 
   return (
     <Card sx={{ maxWidth: 345 }} className="bg-slate-300 flex-1">
@@ -56,6 +65,55 @@ export default function CardItem({ car }) {
               )}
               <FiShoppingCart />
             </span>
+            <UniModal title={"Edit"}>
+              <Form
+                form={form}
+                layout="vertical"
+                onFinish={onFinish}
+                className="bg-slate-200 p-4 rounded-lg"
+                initialValues={{
+                  name: car.name,
+                  seats: car.seats,
+                }}
+              >
+                {/* Name Field */}
+                <Form.Item
+                  label="Name"
+                  name="name"
+                  rules={[
+                    { required: true, message: "Please enter the car name" },
+                  ]}
+                >
+                  <Input placeholder="Enter car name" />
+                </Form.Item>
+
+                {/* Seats Field */}
+                <Form.Item
+                  label="Seats"
+                  name="seats"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter the number of seats",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={1}
+                    max={8}
+                    style={{ width: "100%" }}
+                    placeholder="Enter number of seats"
+                  />
+                </Form.Item>
+
+                {/* Submit Button */}
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </UniModal>
             <span
               onClick={() => dispatch({ type: "TOGGLE_WISHLIST_ITEM", car })}
               className="p-2 rounded-full hidden group-hover:block hover:bg-red-200 text-[1rem] bg-red-100 duration-200"

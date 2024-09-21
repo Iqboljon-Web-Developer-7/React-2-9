@@ -21,8 +21,27 @@ export const productApi = api.injectEndpoints({
         url: `/cars/${id}`,
       }),
     }),
+    createCar: build.mutation({
+      query: (body) => ({
+        url: `/cars/create`,
+        method: "POST",
+        body,
+      }),
+    }),
+    updateCar: build.mutation({
+      query: ({ id, body }) => ({
+        url: `/cars/${id}`,
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, useGetCarsQuery, useGetCarQuery } =
-  productApi;
+export const {
+  useGetCategoriesQuery,
+  useGetCarsQuery,
+  useGetCarQuery,
+  useCreateCarMutation,
+  useUpdateCarMutation,
+} = productApi;

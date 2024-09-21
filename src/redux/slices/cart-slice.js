@@ -19,8 +19,6 @@ export const cart = createSlice({
       console.log(state.value);
     },
     remove: (state, action) => {
-      console.log(action);
-
       state.value = state.value.filter((item) => item._id != action.payload);
     },
     update: (state, action) => {
@@ -30,9 +28,6 @@ export const cart = createSlice({
           : item
       );
     },
-    // increment: (state,action) => {
-
-    // }
   },
 });
 
